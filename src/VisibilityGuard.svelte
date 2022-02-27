@@ -1,36 +1,15 @@
 <script>
-  // https://hat-tap.com/blog/posts/images-in-svelte-lazy-loading-with-placeholder/
+  import { inview } from 'svelte-inview';
 
-  import { onMount } from "svelte";
-
-  let el = null;
-  let visible = false;
+  let visible = false
   let hasBeenVisible = false;
-  let observer = null;
-  let rootMargin = "0px 0px 200px 0px";
+  const options = {
+    rootMargin: '200px',
+  };
 
-  onMount(() => {
-    observer = new IntersectionObserver(
-      (entries) => {
-        visible = entries[0].isIntersecting;
-        hasBeenVisible = hasBeenVisible || visible;
-      },
-      { rootMargin: rootMargin }
-    );
-    observer.observe(el);
-
-    return () => {
-      if (!hasBeenVisible) {
-        observer.unobserve(el);
-      }
-    };
-  });
-
-  $: if (hasBeenVisible) {
-    observer.unobserve(el);
-  }
+  const handleChange = ({detail}) => (hasBeenVisible = (visible = detail.inview) || hasBeenVisible);
 </script>
 
-<div bind:this={el}>
+<div use:inview={options} on:change={handleChange}>
   <slot {visible} {hasBeenVisible} />
 </div>

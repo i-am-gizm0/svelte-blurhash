@@ -33,5 +33,8 @@
   "files": [
     "src",
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "svelte-inview": "^3.0.0"
+  }
 }
